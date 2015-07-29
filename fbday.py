@@ -16,7 +16,7 @@ def some_action(post):
 	time = post['created_time']
 	message = resp["message"]
 	#print(resp.get("likes","likes : None"))
-	if resp.get("likes","None")=="None":
+	if bday.replace('/','-') in time and  resp.get("likes","None")=="None":
 		graph.put_like(post['id'])
 		if "happy" in message or "bday" in message or "birthday" in message:
 			graph.put_comment(post['id'],wishes[count%2].replace("<name>",name))
@@ -49,7 +49,7 @@ a = {'limit':400}
 posts = graph.get_connections(profile['id'], 'feed', args=a)
 d = datetime.date.today()
 if str(d.month) + '/' + str(d.day) == bday:
-	print("happy bday!")
+	print("happy Birthday!")
 else:
 	print("Not your bday!")
 	exit()
