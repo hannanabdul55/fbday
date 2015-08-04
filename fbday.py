@@ -2,8 +2,15 @@
 import facebook
 import requests
 import datetime
+
+'''
+Add your wishes templates below in the wishes list where, in each entry the string "<name>"
+will be replaced with the name of the wisher 
+'''
 wishes = ["Hey <name>, Thank you! :) ", "Thank You, <name> :D"]
 count =0
+
+
 def some_action(post):
 	global count
 	#print(post['created_time'])
@@ -11,6 +18,7 @@ def some_action(post):
 	resp = graph.request("/" + post['id'] +"?fields=from,likes,message")
 	#print(resp)
 	name = resp["from"]["name"].split(" ")[0]
+	temp_len = len(wishes)
 	if name is None:
 		name = ""
 	time = post['created_time']
@@ -18,9 +26,9 @@ def some_action(post):
 	#print(resp.get("likes","likes : None"))
 	if bday.replace('/','-') in time and  resp.get("likes","None")=="None":
 		graph.put_like(post['id'])
-		if "happy" in message or "bday" in message or "birthday" in message:
-			graph.put_comment(post['id'],wishes[count%2].replace("<name>",name))
-			print("posted comment: " +wishes[count%2].replace("<name>",name))
+		if "happy" in message or "bday" in message or "birthday" in message or ("many" in message and "returns" in message) :
+			graph.put_comment(post['id'],wishes[count%temp_len].replace("<name>",name))
+			print("posted comment: " +wishes[count%temp_len].replace("<name>",name))
 			count+=1
 	#print(time)
 	#print(name)
@@ -31,6 +39,8 @@ def some_action(post):
 
 # You'll need an access token here to do anything.  You can get a temporary one
 # here: https://developers.facebook.com/tools/explorer/
+# Also, Make sure you give the "publish_posts" "access_birthday" and the "access_posts"
+# Permission for the access token
 # TODO: ENTER ACCESS TOKEN HERE
 access_token = ''
 
@@ -59,7 +69,7 @@ while True:
 	try:
 		# Perform some action on each post in the collection we receive from
 		# Facebook.
-		print(posts)
+		#print(posts)
 		[some_action(post=post) for post in posts['data']]
 		# Attempt to make a request to the next page of data, if it exists.
 		posts = requests.get(posts['paging']['next']).json()
