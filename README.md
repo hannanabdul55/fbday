@@ -12,4 +12,4 @@ A very simple / barebone python script to automatically reply to Birthday Wishes
 # Usage
 
 - Open Terminal/Command Prompt in the repository
-- Run `python fbday.py
+- Run `python fbday.py`
